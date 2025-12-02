@@ -10,6 +10,7 @@ API_KEY_OPENAI= os.getenv('API_KEY_OPENAI')
 
 
 
+
 client = OpenAI(api_key=API_KEY_OPENAI)
 get_matches_declaration = [{
     "type": "function",
