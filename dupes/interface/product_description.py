@@ -21,9 +21,13 @@ if nlp_text:
     # TODO: Change the api URL to google after the test in local
 
     dupes_web_api = "http://127.0.0.1:8000/recommend"
+    dupes_web_api_price = "http://127.0.0.1:8000//recommend_with_price"
     response = requests.get(dupes_web_api,params=params)
+    response_price = requests.get(dupes_web_api_price,params=params)
 
     predictions = response.json()
+
+    predict_price = response_price.json()
 
     st.markdown("""
                 ### No ads. No sponsored brands. Just unbiased recommendations.
@@ -36,8 +40,8 @@ if nlp_text:
             with st.container(border= True):
                 st.title(f"{list(prediction["product_name"].values())[0]}")
                 st.caption(f"{list(prediction["en_description"].values())[0]}")
-                st.caption(f"Actual price in stores: €{list(prediction["price_eur"].values())[0]}")
-                st.caption(f"The price we think its fair: €")
+                st.caption(f"Actual price in stores: €{list(prediction["price_eur"].values())[0]} for {list(prediction["volume_ml"].values())[0]} ml.")
+                st.caption(f"The price we think its fair: € {round(predict_price['prediction'][0]['price_prediction'],2)} per {predict_price['prediction'][0]['volume_ml']} ml.")
 
 
 
