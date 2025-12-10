@@ -27,3 +27,10 @@ if shampoo_input:
     response = requests.get(dupes_web_api,params=params)
 
     predictions = response.json()
+
+    for prediction in predictions:
+
+        with st.container(border= True):
+            st.title(f"{prediction["product_name"]}")
+            st.caption(f"{prediction["en_description"]}")
+            st.caption(f"Actual price in stores: €{prediction["price_eur"]}")

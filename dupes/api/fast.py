@@ -117,7 +117,7 @@ def get_recommendation_ingredients(
     dropped =  df.dropna(subset=["formula"], axis=0)
     results= main_res_product_id(product_id, dropped)
 
-    product_ids= results['ids'][0]
+    product_ids= results['ids'][0][1:]
 
 
     #breakpoint()
