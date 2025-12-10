@@ -36,6 +36,7 @@ def embedding_description_populate_chromadb(dropped: pd.DataFrame, embeddings):
     return collection
 
 def embedding_description_query_chromadb(query, n_results=5):
+    df_cleaned = clean_data(df)
     collection = chroma_client.get_collection(name="description_embed")
     query_embedding = model.encode(query, show_progress_bar=False)
     results = collection.query(
@@ -49,7 +50,7 @@ def embedding_description_query_chromadb(query, n_results=5):
 
 # Main functionality
 def embedding_description_get_recommendation():
-
-    dropped_desc = embedding_description_get_data(df)
+    df_cleaned = clean_data(df)
+    dropped_desc = embedding_description_get_data(df_cleaned)
     embeddings_desc = embedding_description_embed(dropped_desc)
     collection_desc = embedding_description_populate_chromadb(dropped_desc, embeddings_desc)

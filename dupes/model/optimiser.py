@@ -25,6 +25,11 @@ X = df.drop(columns=['price_eur'])
 # Optimise the model with hyper parameter tuning
 def objective(trial):
 
+    preprocess = preprocess_data(df)
+
+    target = preprocess['price_eur'] / preprocess['volume_ml']
+    X = preprocess.drop(columns=['price_eur'])
+
     # Define Optuna hyper parameters
     params = {
         'objective': 'reg:squarederror',
@@ -62,9 +67,14 @@ def load_model():
 
 if __name__ == '__main__':
 
-    # Create and run the optimization process with 100 trials
+    preprocess = preprocess_data(df)
+
+    target = preprocess['price_eur'] / preprocess['volume_ml']
+    X = preprocess.drop(columns=['price_eur'])
+
+    # Create and run the optimization process with 500 trials
     study = optuna.create_study(study_name="xgboost_study", direction='maximize')
-    study.optimize(objective, n_trials=200, show_progress_bar=True)
+    study.optimize(objective, n_trials=500, show_progress_bar=True)
 
     # Retrieve the best parameter values
     best_params = study.best_params
