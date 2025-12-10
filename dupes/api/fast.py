@@ -43,7 +43,31 @@ def get_recommendation(description: str):
 
     recommendation = embedding_description_query_chromadb(description)
 
+
     return recommendation
+
+
+@app.get("/recommend_with_price")
+def get_recommendation(description: str):
+    price_model = app.state.model
+
+
+    recommendation = embedding_description_query_chromadb(description)
+    if len(recommendation) > 0:
+        df_concat = pd.concat(recommendation)
+        product_names = df_concat.product_name.values
+        predict_price_df = df.loc[df.product_name.isin(product_names)][["volume_ml", "formula"]]
+        predict_price_df["volume_ml"] =  predict_price_df["volume_ml"].astype(float)
+
+        preproc = preprocess_prediction_input(predict_price_df)
+        pred_price_ml = price_model.predict(preproc).tolist()
+        df_concat["ml_prediction"] = pred_price_ml
+        df_concat["price_prediction"] = df_concat["ml_prediction"] * df_concat["volume_ml"]
+        return {"prediction": df_concat.to_dict(orient="records")}
+
+
+    return recommendation
+
 
 
 
