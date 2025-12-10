@@ -20,7 +20,7 @@ if nlp_text:
 
     # TODO: Change the api URL to google after the test in local
 
-    dupes_web_api = "http://127.0.0.1:8000/recomend"
+    dupes_web_api = "http://127.0.0.1:8000/recommend"
     response = requests.get(dupes_web_api,params=params)
 
     predictions = response.json()
@@ -30,12 +30,14 @@ if nlp_text:
                 """)
 
     for prediction in predictions:
+        if prediction["product_name"]:
 
-        with st.container(border= True):
-            st.title(f"# {list(prediction["product_name"].values())[0]}")
-            st.caption(f"{list(prediction["description"].values())[0]}")
-            st.caption(f"Actual price in stores: €{list(prediction["price_eur"].values())[0]}")
-            st.caption(f"The price we think its fair: €")
+
+            with st.container(border= True):
+                st.title(f"# {list(prediction["product_name"].values())[0]}")
+                st.caption(f"{list(prediction["en_description"].values())[0]}")
+                st.caption(f"Actual price in stores: €{list(prediction["price_eur"].values())[0]}")
+                st.caption(f"The price we think its fair: €")
 
 
 
